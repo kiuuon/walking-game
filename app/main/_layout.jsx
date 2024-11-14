@@ -3,8 +3,11 @@ import { Stack } from "expo-router";
 import { Text, View, Image, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import Weather from '../../components/Weather'
+
 export default function MainLayout() {
   const [userData, setUserData] = useState(null);
+
   useEffect(() => {
     (async () => {
       const user = await AsyncStorage.getItem('user');
@@ -25,6 +28,7 @@ export default function MainLayout() {
         </View>
       </View>
       <View style={styles.main}>
+        <Weather />
         <Image source={require('@/assets/images/obesity.png')} style={styles.image}/>
       </View>
       <Stack screenOptions={{ headerShown: false }} />
