@@ -1,5 +1,23 @@
-import { Redirect } from "expo-router";
+import { useEffect, useState } from 'react'
+import { View } from 'react-native'
+import { useRouter } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Index() {
-  return <Redirect href="/main" />; // A 페이지로 리다이렉트
+  const router = useRouter();
+  const [userData, setUserData] = useState(null)
+
+  useEffect(() => {
+    (async () => {
+      const user = await AsyncStorage.getItem('user');
+      console.log(user);
+      if(user) {
+        router.push('/main');
+      } else {
+        router.push('/setting');
+      }
+    })();
+  }, [setUserData])
+
+  return <View />;
 }
