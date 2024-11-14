@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   main: {
+    position: 'relative',
     flex: 0,
     justifyContent: "center",
     alignItems: "center",
