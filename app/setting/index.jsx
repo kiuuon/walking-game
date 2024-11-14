@@ -27,6 +27,9 @@ export default function StatsPage() {
       weight: 150,
       step: 0,
       money: 0,
+      clothes: [],
+      hair: [],
+      equipments: [],
     }
 
     await AsyncStorage.setItem('user', JSON.stringify(userData));
@@ -51,7 +54,7 @@ export default function StatsPage() {
             setItems={setItems}
             placeholder="나이를 선택해 주세요."
             style={styles.dropdown}
-            dropDownContainerStyle={{ width: 180 }} />
+            dropDownContainerStyle={{ width: 180, zIndex: 100 }} />
         </View>
         <View style={styles.option}>
           <Text style={styles.text}>성별</Text>

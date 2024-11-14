@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { useRouter } from "expo-router";
 
 export default function MainPage() {

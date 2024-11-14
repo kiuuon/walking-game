@@ -10,7 +10,6 @@ export default function Index() {
   useEffect(() => {
     (async () => {
       const user = await AsyncStorage.getItem('user');
-      console.log(user);
       if(user) {
         router.push('/main');
       } else {
