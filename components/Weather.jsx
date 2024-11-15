@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import * as Location from 'expo-location';
-import { WEATHER_API_KEY } from "@env";
+import Constants from 'expo-constants';
 
 export default function Weather() {
   const [weatherData, setWeatherData] = useState(null);
   const [ok, setOk] = useState(true);
+  const { WEATHER_API_KEY } = Constants.manifest.extra;
 
   useEffect(() => {
     (async () => {

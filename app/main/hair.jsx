@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Button, Alert } from 'react-native';
 
-export default function HomeScreen() {
+export default function Hair() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [equippedItems, setEquippedItems] = useState({
