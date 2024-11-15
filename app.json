@@ -2,9 +2,6 @@
   "expo": {
     "name": "walking-game",
     "slug": "walking-game",
-    "extra": {
-      "WEATHER_API_KEY": "@env:WEATHER_API_KEY"
-    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
