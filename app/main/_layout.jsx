@@ -58,6 +58,8 @@ export default function MainLayout() {
         setMoney(prevMoney + result.steps);
         if(prevWeight - result.steps >= 50) {
           setWeight(prevWeight - result.steps);
+        } else {
+          setWeight(50);
         }
       });
     }
@@ -99,7 +101,12 @@ export default function MainLayout() {
         </View>
       </View>
       <View style={styles.main}>
-        <Image source={require('@/assets/images/obesity.png')} style={styles.image}/>
+        {weight > 100 ?
+          <Image source={require('@/assets/images/obesity.png')} style={{width: 220, height: 300, zIndex: 10}}/>
+          : weight > 50 ?
+          <Image source={require('@/assets/images/middle.png')} style={{width: 123, height: 300, zIndex: 10}}/>
+          : <Image source={require('@/assets/images/slim.png')} style={{width: 80, height: 300, zIndex: 10}}/>
+        }
         <Weather />
       </View>
       <Stack screenOptions={{ headerShown: false }} />
@@ -132,11 +139,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 400,
-  },
-  image: {
-    width: 300,
-    height: 300,
-    zIndex: 10,
-    alignSelf: 'center'
   },
 });
