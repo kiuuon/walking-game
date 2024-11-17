@@ -30,9 +30,6 @@ export default function StatsPage() {
       step: 0,
       totalStep: 0,
       money: 0,
-      clothes: [],
-      hair: [],
-      equipments: [],
       date: today,
     }
 

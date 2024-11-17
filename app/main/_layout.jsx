@@ -8,6 +8,7 @@ import Weather from '../../components/Weather'
 
 export default function MainLayout() {
   const [step, setStep] = useState(0);
+  const [totalStep, setTotalStep] = useState(0);
   const [money, setMoney] = useState(0);
   const [weight, setWeight] = useState(0);
   const [age, setAge] = useState(0);
@@ -16,6 +17,7 @@ export default function MainLayout() {
   const today = new Date().toISOString().split("T")[0];
 
   let prevStep;
+  let prevTodayStep;
   let prevMoney;
   let prevWeight;
 
@@ -34,11 +36,13 @@ export default function MainLayout() {
       }
 
       setStep(userData.step);
+      setTotalStep(userData.totalStep);
       setMoney(userData.money);
       setWeight(userData.weight);
       setAge(userData.age);
       setName(userData.name);
       prevStep = userData.step;
+      prevTodayStep = userData.totalStep;
       prevMoney = userData.money;
       prevWeight = userData.weight;
     })();
@@ -50,18 +54,36 @@ export default function MainLayout() {
     if (isAvailable) {
       return Pedometer.watchStepCount(result => {
         setStep(prevStep + result.steps);
+        setTotalStep(prevTodayStep + result.steps);
         setMoney(prevMoney + result.steps);
-        setWeight(prevWeight - result.steps);
-        console.log(result.steps);
+        if(prevWeight - result.steps >= 50) {
+          setWeight(prevWeight - result.steps);
+        }
       });
     }
   };
 
-
-
   useEffect(() => {
     const subscription = subscribe();
   }, []);
+
+  useEffect(() => {
+    if(name !== '') {
+      const interval = setInterval(async () => {
+        await AsyncStorage.setItem('user', JSON.stringify({
+          name,
+          age,
+          weight,
+          step,
+          totalStep,
+          money,
+          date: today,
+        }));
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [name, age, weight, step, totalStep, money]);
 
   return (
     <View style={styles.container}>
@@ -73,6 +95,7 @@ export default function MainLayout() {
         <View style={styles.headerTextBox}>
           <Text style={styles.headerText}>{`돈: ${money}원`}</Text>
           <Text style={styles.headerText}>{`걸음수: ${step}`}</Text>
+          <Text style={styles.headerText}>{`누적 걸음수: ${totalStep}`}</Text>
         </View>
       </View>
       <View style={styles.main}>
@@ -97,7 +120,7 @@ const styles = StyleSheet.create({
   },
   headerTextBox: {
     flex: 0,
-    width: 100,
+    width: 200,
     gap: 10,
   },
   headerText: {
@@ -115,6 +138,5 @@ const styles = StyleSheet.create({
     height: 300,
     zIndex: 10,
     alignSelf: 'center'
-    // backgroundColor: "gray",
   },
 });
