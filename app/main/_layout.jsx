@@ -2,28 +2,77 @@ import { useEffect, useState } from 'react'
 import { Stack } from "expo-router";
 import { Text, View, Image, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Pedometer } from "expo-sensors";
 
 import Weather from '../../components/Weather'
 
 export default function MainLayout() {
-  const [userData, setUserData] = useState(null);
+  const [step, setStep] = useState(0);
+  const [money, setMoney] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [age, setAge] = useState(0);
+  const [name, setName] = useState('');
+
+  const today = new Date().toISOString().split("T")[0];
+
+  let prevStep;
+  let prevMoney;
+  let prevWeight;
+
   useEffect(() => {
     (async () => {
-      const user = await AsyncStorage.getItem('user');
-      setUserData(JSON.parse(user));
+      let user = await AsyncStorage.getItem('user');
+      let userData = JSON.parse(user);
+      if(userData.date !== today) {
+        await AsyncStorage.setItem('user', JSON.stringify({
+          ...userData,
+          step: 0,
+          date: today,
+        }));
+        user = await AsyncStorage.getItem('user');
+        userData = JSON.parse(user);
+      }
+
+      setStep(userData.step);
+      setMoney(userData.money);
+      setWeight(userData.weight);
+      setAge(userData.age);
+      setName(userData.name);
+      prevStep = userData.step;
+      prevMoney = userData.money;
+      prevWeight = userData.weight;
     })();
   },[]);
+
+  const subscribe = async () => {
+    const isAvailable = await Pedometer.isAvailableAsync();
+
+    if (isAvailable) {
+      return Pedometer.watchStepCount(result => {
+        setStep(prevStep + result.steps);
+        setMoney(prevMoney + result.steps);
+        setWeight(prevWeight - result.steps);
+        console.log(result.steps);
+      });
+    }
+  };
+
+
+
+  useEffect(() => {
+    const subscription = subscribe();
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerTextBox}>
-          <Text style={styles.headerText}>{`${userData?.age}세 ${userData?.name}`}</Text>
-          <Text style={styles.headerText}>{`체중: ${userData?.weight}kg`}</Text>
+          <Text style={styles.headerText}>{`${age}세 ${name}`}</Text>
+          <Text style={styles.headerText}>{`체중: ${weight}kg`}</Text>
         </View>
         <View style={styles.headerTextBox}>
-          <Text style={styles.headerText}>{`돈: ${userData?.money}원`}</Text>
-          <Text style={styles.headerText}>{`걸음수: ${userData?.step}`}</Text>
+          <Text style={styles.headerText}>{`돈: ${money}원`}</Text>
+          <Text style={styles.headerText}>{`걸음수: ${step}`}</Text>
         </View>
       </View>
       <View style={styles.main}>

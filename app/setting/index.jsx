@@ -17,6 +17,8 @@ export default function StatsPage() {
 
   const [gender, setGender] = useState(null);
 
+  const today = new Date().toISOString().split("T")[0];
+
   const confirm = async () => {
     if(!name || !age || !gender) return;
 
@@ -26,10 +28,12 @@ export default function StatsPage() {
       gender,
       weight: 150,
       step: 0,
+      totalStep: 0,
       money: 0,
       clothes: [],
       hair: [],
       equipments: [],
+      date: today,
     }
 
     await AsyncStorage.setItem('user', JSON.stringify(userData));
