@@ -71,7 +71,12 @@ export default function MainPage() {
             <View style={styles.closeButtonBox}>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => router.push("/mini-game")}
+                onPress={() => {
+                  setModalVisible(false);
+                  setTimeout(() => {
+                    router.push("/mini-game");
+                  }, 1);
+                }}
               >
                 <Text>네</Text>
               </TouchableOpacity>

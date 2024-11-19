@@ -239,7 +239,12 @@ const App = () => {
             <View style={styles.closeButtonBox}>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => router.push("/main")}
+                onPress={() => {
+                  setModalVisible(false);
+                  setTimeout(() => {
+                    router.push("/main");
+                  }, 1);
+                }}
               >
                 <Text>네</Text>
               </TouchableOpacity>
