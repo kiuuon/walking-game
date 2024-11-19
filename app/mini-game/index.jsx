@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import WebView from 'react-native-webview';
 import { useRouter } from "expo-router";
@@ -9,6 +9,9 @@ const App = () => {
   const webViewRef = useRef(null);
   const [currentPosition, setCurrentPosition] = useState(null);
   const [monsterPosition, setMonsterPosition] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
   const router = useRouter();
 
   const generateFixedRadiusPosition = (centerLat, centerLng, radius) => {
@@ -23,7 +26,14 @@ const App = () => {
     };
   };
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  };
+
   useEffect(() => {
+    let timerInterval;
     (async () => {
 
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -55,7 +65,32 @@ const App = () => {
           }
         }
       );
+
+      timerInterval = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timerInterval);
+            if (!gameOver) {
+              setGameWon(true);
+              Alert.alert(
+                "You Win!",
+                "몬스터에게서 살아남았습니다!",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => router.push('/main'),
+                  },
+                ]
+              );
+            }
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
     })();
+
+    return () => clearInterval(timerInterval);
   }, []);
 
   const html = `
@@ -144,7 +179,8 @@ const App = () => {
 `;
 
   const handleWebViewMessage = (event) => {
-    if (event.nativeEvent.data === "GAME_OVER") {
+    if (event.nativeEvent.data === "GAME_OVER" && !gameWon) {
+      setGameOver(true);
       Alert.alert(
         "Game Over!",
         "몬스터에게 잡혔습니다!",
@@ -160,6 +196,10 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.timerContainer}>
+        <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+      </View>
+
       <WebView
         ref={webViewRef}
         originWhitelist={['*']}
@@ -189,6 +229,22 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  timerContainer: {
+    position: 'absolute',
+    top: 10,
+    left: '50%',
+    transform: [{ translateX: -50 }],
+    zIndex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  timerText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
