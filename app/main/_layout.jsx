@@ -50,6 +50,7 @@ export default function MainLayout() {
 
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
+    console.log(isAvailable);
 
     if (isAvailable) {
       return Pedometer.watchStepCount(result => {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     height: 100,
-    backgroundColor: "#D9D9D9",
+    backgroundColor: "#314056",
     padding: 30,
   },
   headerTextBox: {
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
+    color: "white",
   },
   main: {
     position: 'relative',

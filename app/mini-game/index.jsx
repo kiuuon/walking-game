@@ -120,8 +120,8 @@ const App = () => {
               level: 4,
             };
             map = new kakao.maps.Map(container, options);
-          
-            const imageSrc = "https://cdn-icons-png.flaticon.com/512/3449/3449610.png";
+            
+            const imageSrc = "https://cdn-icons-png.flaticon.com/128/11383/11383207.png"; // 팩맨 아이콘 제작자: Creative Squad - Flaticon
             const imageSize = new kakao.maps.Size(40, 40);
             const imageOption = { offset: new kakao.maps.Point(20, 40) };
           
@@ -133,7 +133,7 @@ const App = () => {
               position: new kakao.maps.LatLng(currentLatitude, currentLongitude),
             });
           
-            const monsterImageSrc = "https://cdn-icons-png.flaticon.com/512/3449/3449610.png";
+            const monsterImageSrc = "https://cdn-icons-png.flaticon.com/128/11378/11378550.png"; // 팩맨 고스트 아이콘 제작자: Tahsin Tahil - Flaticon
           
             const monsterMarkerImage = new kakao.maps.MarkerImage(monsterImageSrc, imageSize, imageOption);
         
@@ -313,12 +313,12 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 10,
     backgroundColor: 'lightgray',
-    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: 10,
-    width: 70,
-    height: 40,
+    width: 50,
+    height: 30,
   },
   closeButtonBox: {
     flexDirection: 'row',

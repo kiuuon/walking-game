@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 40,
     paddingVertical: 20,
+    backgroundColor: "#314056",
   },
   buttonContainer: {
     flex: 0,
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
+    borderRadius: 5,
     width: 70,
     height: 40,
   },
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: 105,
     height: 40,
+    borderRadius: 5,
   },
   button3: {
     flex: 0,
@@ -146,6 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: 240,
     height: 40,
+    borderRadius: 5,
   },
   modalOverlay: {
     flex: 1,
@@ -170,12 +174,12 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 10,
     backgroundColor: 'lightgray',
-    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: 10,
-    width: 70,
-    height: 40,
+    width: 50,
+    height: 30,
   },
   closeButtonBox: {
     flexDirection: 'row',
