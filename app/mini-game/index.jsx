@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, Modal } from 'react-native'
 import * as Location from 'expo-location';
 import WebView from 'react-native-webview';
 import { useRouter } from "expo-router";
@@ -12,6 +12,7 @@ const App = () => {
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
   const generateFixedRadiusPosition = (centerLat, centerLng, radius) => {
@@ -198,6 +199,9 @@ const App = () => {
     <View style={styles.container}>
       <View style={styles.timerContainer}>
         <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.exitText}>X</Text>
+        </TouchableOpacity>
       </View>
 
       <WebView
@@ -222,6 +226,33 @@ const App = () => {
         }}
         onMessage={handleWebViewMessage}
       />
+
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="none"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text>미니게임을 종료하겠습니까?</Text>
+            <View style={styles.closeButtonBox}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => router.push("/main")}
+              >
+                <Text>네</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text>아니요</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -232,6 +263,9 @@ const styles = StyleSheet.create({
   },
   timerContainer: {
     position: 'absolute',
+    flex: 0,
+    flexDirection: 'row',
+    gap: 20,
     top: 10,
     left: '50%',
     transform: [{ translateX: -50 }],
@@ -246,6 +280,47 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  exitText: {
+    color: 'red',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  closeButton: {
+    marginTop: 10,
+    backgroundColor: 'lightgray',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 10,
+    width: 70,
+    height: 40,
+  },
+  closeButtonBox: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
+  }
 });
 
 export default App;
