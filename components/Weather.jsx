@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import * as Location from 'expo-location';
-import WEATHER_API_KEY from '../environment';
+import env from '../environment';
 
 export default function Weather() {
   const [weatherData, setWeatherData] = useState(null);
@@ -18,7 +18,7 @@ export default function Weather() {
 
       try {
         const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${env.WEATHER_API_KEY}&units=metric`
         );
         const data = await response.json();
         setWeatherData(data);

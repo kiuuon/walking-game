@@ -35,7 +35,9 @@ export default function MainPage() {
             <Text>업적</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button3}>
+        <TouchableOpacity
+          onPress={() => router.push("/mini-game")}
+          style={styles.button3}>
           <Text>미니게임 시작</Text>
         </TouchableOpacity>
       </View>
