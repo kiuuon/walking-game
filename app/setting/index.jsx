@@ -33,7 +33,16 @@ export default function StatsPage() {
       date: today,
     }
 
+    const achievements = [
+      { name: '누적 걸음수 100 걸음', progress: 100, completed: false },
+      { name: '누적 걸음수 1000 걸음', progress: 1000, completed: false },
+      { name: '누적 걸음수 10000 걸음', progress: 10000, completed: false },
+      { name: '누적 걸음수 100000 걸음', progress: 100000, completed: false },
+      { name: '누적 걸음수 1000000 걸음', progress: 1000000, completed: false },
+    ]
+
     await AsyncStorage.setItem('user', JSON.stringify(userData));
+    await AsyncStorage.setItem('achievements', JSON.stringify(achievements));
     router.push("/main")
   }
 
