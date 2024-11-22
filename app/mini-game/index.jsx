@@ -4,6 +4,8 @@ import * as Location from 'expo-location';
 import WebView from 'react-native-webview';
 import { useRouter } from "expo-router";
 import env from '../../environment';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Pedometer } from 'expo-sensors'
 
 const App = () => {
   const webViewRef = useRef(null);
@@ -14,6 +16,87 @@ const App = () => {
   const [timeLeft, setTimeLeft] = useState(60);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+  const [step, setStep] = useState(0);
+  const [totalStep, setTotalStep] = useState(0);
+  const [money, setMoney] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [age, setAge] = useState(0);
+  const [name, setName] = useState('');
+
+  const today = new Date().toISOString().split("T")[0];
+
+  let prevStep;
+  let prevTodayStep;
+  let prevMoney;
+  let prevWeight;
+
+  useEffect(() => {
+    (async () => {
+      let user = await AsyncStorage.getItem('user');
+      let userData = JSON.parse(user);
+      if(userData.date !== today) {
+        await AsyncStorage.setItem('user', JSON.stringify({
+          ...userData,
+          step: 0,
+          date: today,
+        }));
+        user = await AsyncStorage.getItem('user');
+        userData = JSON.parse(user);
+      }
+
+      setStep(userData.step);
+      setTotalStep(userData.totalStep);
+      setMoney(userData.money);
+      setWeight(userData.weight);
+      setAge(userData.age);
+      setName(userData.name);
+      prevStep = userData.step;
+      prevTodayStep = userData.totalStep;
+      prevMoney = userData.money;
+      prevWeight = userData.weight;
+    })();
+  },[]);
+
+  const subscribe = async () => {
+    const isAvailable = await Pedometer.isAvailableAsync();
+
+    if (isAvailable) {
+      return Pedometer.watchStepCount(result => {
+        console.log("watch");
+        setStep(prevStep + result.steps);
+        setTotalStep(prevTodayStep + result.steps);
+        setMoney(prevMoney + result.steps);
+        if(prevWeight - result.steps >= 50) {
+          setWeight(prevWeight - result.steps);
+        } else {
+          setWeight(50);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    const subscription = subscribe();
+  }, []);
+
+  useEffect(() => {
+    if(name !== '') {
+      const interval = setInterval(async () => {
+        await AsyncStorage.setItem('user', JSON.stringify({
+          name,
+          age,
+          weight,
+          step,
+          totalStep,
+          money,
+          date: today,
+        }));
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [name, age, weight, step, totalStep, money]);
+
 
   const generateFixedRadiusPosition = (centerLat, centerLng, radius) => {
     const randomAngle = Math.random() * 2 * Math.PI;

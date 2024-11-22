@@ -22,6 +22,7 @@ export default function MainLayout() {
   let prevWeight;
 
   useEffect(() => {
+
     (async () => {
       let user = await AsyncStorage.getItem('user');
       let userData = JSON.parse(user);
@@ -50,10 +51,10 @@ export default function MainLayout() {
 
   const subscribe = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
-    console.log(isAvailable);
 
     if (isAvailable) {
       return Pedometer.watchStepCount(result => {
+        console.log("prevStep: ", prevStep, "stes: ", result.steps);
         setStep(prevStep + result.steps);
         setTotalStep(prevTodayStep + result.steps);
         setMoney(prevMoney + result.steps);
