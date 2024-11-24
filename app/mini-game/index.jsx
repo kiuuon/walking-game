@@ -233,7 +233,8 @@ const App = () => {
             marker.setPosition(newPosition);
           };
           
-          const timer = setInterval(() => {
+
+            const timer = setInterval(() => {
             const playerPosition = marker.getPosition();
             const monsterPosition = monsterMarker.getPosition();
 
@@ -252,7 +253,7 @@ const App = () => {
               Math.pow(playerPosition.getLng() - newMonsterPosition.getLng(), 2)
              ) * 111000;
             
-            if (distance < 80) {
+            if (distance < 20) {
               window.ReactNativeWebView.postMessage("GAME_OVER");
               clearInterval(timer);
             }

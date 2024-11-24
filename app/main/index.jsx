@@ -51,12 +51,6 @@ export default function MainPage() {
         >
           <Text>인벤토리</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button1}
-          onPress={() => router.push("/stats")}
-        >
-          <Text>운동량</Text>
-        </TouchableOpacity>
       </View>
 
       <Modal

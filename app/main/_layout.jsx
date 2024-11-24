@@ -83,7 +83,7 @@ export default function MainLayout() {
           money,
           date: today,
         }));
-      }, 5000);
+      }, 3000);
 
       return () => clearInterval(interval);
     }
@@ -104,10 +104,10 @@ export default function MainLayout() {
       </View>
       <View style={styles.main}>
         {weight > 100 ?
-          <Image source={require('@/assets/images/obesity.png')} style={{width: 220, height: 300, zIndex: 10}}/>
+          <Image source={require('@/assets/images/obesity.png')} style={{width: 150, height: 700, zIndex: -1}}/>
           : weight > 50 ?
-          <Image source={require('@/assets/images/middle.png')} style={{width: 123, height: 300, zIndex: 10}}/>
-          : <Image source={require('@/assets/images/slim.png')} style={{width: 80, height: 300, zIndex: 10}}/>
+          <Image source={require('@/assets/images/middle.png')} style={{width: 150, height: 700, zIndex: -1}}/>
+          : <Image source={require('@/assets/images/slim.png')} style={{width: 150, height: 700, zIndex: -1}}/>
         }
         <Weather />
       </View>
